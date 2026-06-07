@@ -13,7 +13,7 @@
 source /home/www/am.fl.de/html/sh/am_konfig.sh
 source /home/www/am.fl.de/html/sh/am_hilfe.sh
 
-ZIEL_WELT="$ZM_DATEN/start.json"
+ZIEL_WELT="$ZM_DATEN/1/willkommen.json"
 
 am_log "test_zettel.sh gestartet"
 
