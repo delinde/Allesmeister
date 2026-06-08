@@ -16,12 +16,15 @@ AM_PROTOKOLL="$AM_HTML/protokoll"
 ZM_HTML="/home/www/zm.fl.de/html"
 ZM_DATEN="$ZM_HTML/daten"
 
-# --- Katalogmeister (DB) ----------------------------------------
+# --- Katalogmeister ---------------------------------------------
 KM_HTML="/home/www/km.fl.de/html"
+KM_API="$KM_HTML/api/div.php"
+KM_ZM_WELT="$ZM_DATEN/1/willkommen.json"   # Zm-Welt für Km-Zettel
 KM_DB_HOST="localhost"
 KM_DB_USER="dm"
 KM_DB_PW="lahnbiege"
 KM_DB_NAME="OffenesProjektKm"
+KM_DB_TABELLE="Flugautos"                   # Haupt-Katalogtabelle (HeftNr 101)
 
 # --- Server -----------------------------------------------------
 SERVER_IP="46.225.170.170"
