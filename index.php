@@ -244,7 +244,8 @@ kmWegweiserNeu()  // Navigationsspalte</pre>
               <code>am_zettel_hinzufuegen</code> · <code>am_welt_liste</code></td></tr>
       <tr><td><code>test_zettel.sh</code></td>
           <td>Grundmuster: Erläuterungszettel in Zm einfügen</td></tr>
-      <tr><td><code>sh/km/</code></td><td>Km-Zubringer (in Vorbereitung)</td></tr>
+      <tr><td><code>sh/km/km_zm.sh</code></td>
+          <td>Km-Zubringer: legt Km-Wegweiser, Km-Suche, Km-Liste in der Zm-Welt an</td></tr>
     </table>
 
     <h3>Einbinden</h3>
@@ -253,6 +254,39 @@ source /home/www/am.fl.de/html/sh/am_hilfe.sh
 
 zettel=$(am_zettel_json --titel "Titel" --inhalt "&lt;p&gt;Text&lt;/p&gt;" --farbe "#d4ffea")
 am_zettel_hinzufuegen "$ZM_DATEN/1/willkommen.json" "$zettel"</pre>
+
+    <h3>am_zettel_json – Parameter</h3>
+    <table>
+      <tr><th>Parameter</th><th>Voreinstellung</th><th>Bedeutung</th></tr>
+      <tr><td><code>--titel</code></td><td>Neuer Zettel</td><td>Titel</td></tr>
+      <tr><td><code>--inhalt</code></td><td><code>&lt;p&gt;&lt;/p&gt;</code></td><td>HTML-Inhalt</td></tr>
+      <tr><td><code>--farbe</code></td><td>#FFFFEE</td><td>Hintergrundfarbe (Hex)</td></tr>
+      <tr><td><code>--winkel</code></td><td>0</td><td>Drehung in Grad</td></tr>
+      <tr><td><code>--breite / --hoehe</code></td><td>300 / 200</td><td>Größe in px</td></tr>
+      <tr><td><code>--stichworte</code></td><td>–</td><td>Komma-getrennte Schlüsselwörter</td></tr>
+      <tr><td><code>--link</code></td><td>–</td><td>Klickziel-URL</td></tr>
+      <tr><td><code>--op-div</code></td><td>–</td><td>JSON für API-Zettel, z.B. <code>'{"quelle":"km","rezept":"suche","params":{}}'</code></td></tr>
+    </table>
+
+    <h3>am_zettel_entfernen</h3>
+    <pre>am_zettel_entfernen "$ZM_DATEN/1/willkommen.json" "km-zubringer"
+# Entfernt alle Zettel deren stichworte-Feld "km-zubringer" enthält</pre>
+
+    <h3>km_zm.sh – Km-Zubringer</h3>
+    <pre># Standard: legt 3 Zettel in $KM_ZM_WELT an
+bash /home/www/am.fl.de/html/sh/km/km_zm.sh
+
+# Andere Zm-Welt als Ziel:
+bash /home/www/am.fl.de/html/sh/km/km_zm.sh /pfad/zur/welt.json</pre>
+    <p>Legt drei Zettel an (Stichwort <code>km-zubringer</code>, Farbe <code>#d4ffea</code>):</p>
+    <table>
+      <tr><th>Zettel</th><th>Rezept</th><th>Inhalt</th></tr>
+      <tr><td>Km-Wegweiser</td><td><code>wegweiser</code></td><td>Navigationsspalte (240 × 360)</td></tr>
+      <tr><td>Km-Suche</td><td><code>suche</code></td><td>Suchformular + Ergebnisse (440 × 480)</td></tr>
+      <tr><td>Km-Liste</td><td><code>liste</code></td><td>Alle Einträge seitenweise (480 × 520)</td></tr>
+    </table>
+    <p>Bei jedem Aufruf werden alte <code>km-zubringer</code>-Zettel zuerst entfernt,
+       dann frische angelegt.</p>
 
     <h3>Zertifikate &amp; nginx</h3>
     <pre>echo "DOMAIN.de" | sudo bash /usr/local/bin/zert.sh
@@ -283,6 +317,9 @@ am_zettel_hinzufuegen "$ZM_DATEN/1/willkommen.json" "$zettel"</pre>
             GitHub: <a href="https://github.com/delinde/Katalogmeister">delinde/Katalogmeister</a></span></li>
       <li><span class="datum">2026-06-08</span><span class="check">✓</span>
           <span>CC: <a href="https://am.fl.de">am.fl.de</a> – Dokumentationsseite</span></li>
+      <li><span class="datum">2026-06-08</span><span class="check">✓</span>
+          <span>CC: <code>sh/km/km_zm.sh</code> – Km-Zubringer (Wegweiser · Suche · Liste) ·
+            <code>am_hilfe.sh</code>: <code>--op-div</code> + <code>am_zettel_entfernen</code></span></li>
     </ul>
 
     <h3>Git-Log (Allesmeister)</h3>
