@@ -49,6 +49,7 @@ am_zettel_json() {
     local stichworte=""
     local link=""
     local link_ziel="tab"
+    local op_div=""   # JSON-Objekt für opDiv-Feld, z.B. '{"quelle":"km","rezept":"suche","params":{}}'
 
     # Parameter einlesen
     while [[ $# -gt 0 ]]; do
@@ -63,11 +64,13 @@ am_zettel_json() {
             --stichworte) stichworte="$2"; shift 2 ;;
             --link)       link="$2";       shift 2 ;;
             --link-ziel)  link_ziel="$2";  shift 2 ;;
+            --op-div)     op_div="$2";     shift 2 ;;
             *) echo "am_zettel_json: unbekannter Parameter: $1" >&2; shift ;;
         esac
     done
 
-    jq -n \
+    local basis
+    basis=$(jq -n \
         --arg titel      "$titel"      \
         --arg inhalt     "$inhalt"     \
         --arg farbe      "$farbe"      \
@@ -102,7 +105,14 @@ am_zettel_json() {
         fixiert:      false,
         schlank:      false,
         faehnchen:    ""
-    }'
+    }')
+
+    # opDiv anhängen falls angegeben
+    if [[ -n "$op_div" ]]; then
+        basis=$(echo "$basis" | jq --argjson od "$op_div" '. + {opDiv: $od}')
+    fi
+
+    echo "$basis"
 }
 
 
@@ -138,6 +148,44 @@ am_zettel_hinzufuegen() {
 
     echo "$neu" > "$welt_datei"
     am_log "Zettel eingefügt in: $welt_datei"
+}
+
+
+# ----------------------------------------------------------------
+# am_zettel_entfernen  –  Zettel mit bestimmtem Stichwort löschen
+#
+# Aufruf:  am_zettel_entfernen "/pfad/welt.json" "stichwort"
+#
+# Entfernt alle Zettel deren stichworte-Feld das Stichwort enthält.
+# Nützlich um Zubringer-Zettel vor dem erneuten Einfügen zu bereinigen.
+# ----------------------------------------------------------------
+am_zettel_entfernen() {
+    local welt_datei="$1"
+    local stichwort="$2"
+
+    if [[ ! -f "$welt_datei" ]]; then
+        am_log "FEHLER: Welt-Datei nicht gefunden: $welt_datei"
+        return 1
+    fi
+
+    local vorher nachher anzahl
+    vorher=$(jq '.zettel | length' "$welt_datei")
+
+    cp "$welt_datei" "${welt_datei}.bak"
+
+    nachher_json=$(jq --arg s "$stichwort" \
+        'del(.zettel[] | select(.stichworte | test($s)))' \
+        "$welt_datei")
+
+    if [[ $? -ne 0 ]]; then
+        am_log "FEHLER: jq konnte Zettel nicht entfernen in $welt_datei"
+        return 1
+    fi
+
+    echo "$nachher_json" > "$welt_datei"
+    nachher=$(jq '.zettel | length' "$welt_datei")
+    anzahl=$(( vorher - nachher ))
+    am_log "$anzahl Zettel mit Stichwort \"$stichwort\" entfernt aus: $welt_datei"
 }
 
 
