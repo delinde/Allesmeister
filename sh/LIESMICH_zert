@@ -1,0 +1,32 @@
+HTTPS-Zertifikate und nginx-Konfiguration einrichten
+======================================================
+
+Zwei Skripte stehen zur Verfügung:
+
+1. zert.sh  –  Vollständige Domain mit eigenem Webroot
+   Speicherort: /usr/local/bin/zert.sh
+   Aufruf:      sudo zert.sh
+   Eingabe:     Domain wird interaktiv abgefragt (z.B. example.fl.de)
+   Voraussetzung: /home/www/<domain>/html muss existieren
+   Ergebnis:    nginx-Config + Let's-Encrypt-Zertifikat + PHP-fpm
+
+2. redirect_domain.sh  –  Domain auf andere Domain weiterleiten
+   Speicherort: /home/www/am.fl.de/html/sh/redirect_domain.sh
+   Aufruf:      sudo bash /home/www/am.fl.de/html/sh/redirect_domain.sh <quelle> <ziel>
+   Beispiele:   sudo bash redirect_domain.sh zettelmeister.de zm.fl.de
+                sudo bash redirect_domain.sh allesmeister.de am.fl.de
+   Ergebnis:    HTTP + HTTPS leiten beide per 301 auf https://<ziel> weiter
+
+Was beide Skripte tun:
+  - nginx-Config schreiben (in /etc/nginx/sites-available/)
+  - Symlink nach sites-enabled setzen
+  - nginx testen und neu laden
+  - Zertifikat via certbot/Let's Encrypt holen (Webroot: /var/www/html)
+  - Zertifikat läuft 90 Tage, auto-renewal ist aktiv
+
+Vorhandene Zertifikate prüfen:
+  sudo ls /etc/letsencrypt/live/
+
+nginx-Config prüfen:
+  sudo nginx -t
+  sudo nginx -T | grep server_name
