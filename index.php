@@ -219,8 +219,9 @@ $datum   = date('Y-m-d');
     <table>
       <tr><th>Aufruf</th><th>Liefert</th></tr>
       <tr><td><code>?div=4-suche&amp;q=Begriff</code></td><td>Suchformular</td></tr>
-      <tr><td><code>?div=5-ergebnis&amp;route=search&amp;q=Begriff</code></td><td>Treffer-Tabelle (max. 50)</td></tr>
-      <tr><td><code>?div=5-ergebnis&amp;route=liste&amp;seite=1</code></td><td>Alle Einträge (25 pro Seite)</td></tr>
+      <tr><td><code>?div=5-ergebnis&amp;route=search&amp;q=Begriff</code></td><td>Treffer-Tabelle (max. 50), Gerätname klickbar</td></tr>
+      <tr><td><code>?div=5-ergebnis&amp;route=liste&amp;seite=1</code></td><td>Alle Einträge (25 pro Seite), Gerätname klickbar</td></tr>
+      <tr><td><code>?div=5-ergebnis&amp;route=eintrag&amp;id=N</code></td><td>Einzeleintrag mit allen Feldern + ← Zurück</td></tr>
       <tr><td><code>?div=2-wegweiser</code></td><td>Navigationsspalte</td></tr>
       <tr><td><code>?div=6-bericht&amp;msg=Text&amp;typ=error</code></td><td>Meldungskasten</td></tr>
     </table>
